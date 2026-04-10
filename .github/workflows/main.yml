@@ -22,6 +22,17 @@ jobs:
         cache: maven
     - name: Build
       run: mvn clean install -DskipTests
+    - name: Show test reports
+      if: failure()
+      run: |
+        echo "==== TEST REPORTS ===="
+        cat target/surefire-reports/*.txt || true
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+          name: surefire-reports
+          path: target/surefire-reports/
 
    
   publish-job:
